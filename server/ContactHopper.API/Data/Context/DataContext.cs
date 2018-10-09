@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using ContactHopper.API.Data.Config;
 using ContactHopper.API.Data.Entities;
 using System.IO;
+using ContactHopper.API.Data.Seed;
 
 namespace ContactHopper.API.Data.Context
 {
@@ -28,6 +29,9 @@ namespace ContactHopper.API.Data.Context
         {
             modelBuilder.ApplyConfiguration(new EntryConfig());
             modelBuilder.ApplyConfiguration(new PhoneBookConfig());
+
+            var seed = new MigrationSeeder(modelBuilder);
+            seed.CreateData();
 
             base.OnModelCreating(modelBuilder);
         }

@@ -86,7 +86,7 @@ namespace ContactHopper.API.Controllers
                 await _context.SaveChangesAsync();
 
 
-                return NoContent();
+                return Ok(phoneBook);
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -121,7 +121,7 @@ namespace ContactHopper.API.Controllers
                 _context.PhoneBooks.Add(phoneBook);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetPhoneBook", new { id = phoneBook.Id }, phoneBook);
+                return Ok(phoneBook);
             }
             catch (Exception ex)
             {

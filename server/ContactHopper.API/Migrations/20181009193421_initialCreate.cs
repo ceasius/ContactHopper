@@ -29,7 +29,7 @@ namespace ContactHopper.API.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneBookId = table.Column<int>(nullable: true)
+                    PhoneBookId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +40,7 @@ namespace ContactHopper.API.Migrations
                         column: x => x.PhoneBookId,
                         principalTable: "PhoneBooks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

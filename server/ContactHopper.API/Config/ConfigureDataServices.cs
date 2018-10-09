@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ContactHopper.API.Data.Context;
+using Microsoft.AspNetCore.Builder;
 
 namespace ContactHopper.API.Config
 {
@@ -31,6 +32,13 @@ namespace ContactHopper.API.Config
                 provider.GetService<DataContext>());
 
             return services;
+        }
+
+        public static IApplicationBuilder UseContactDbSeeder(this IApplicationBuilder app)
+        {
+            var context = app.ApplicationServices.GetService<DataContext>();
+            context.Database.EnsureCreated();
+            return app;
         }
     }
 }

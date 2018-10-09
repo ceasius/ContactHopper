@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using ContactHopper.API.Config;
+using ContactHopper.API.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -46,8 +47,26 @@ namespace ContactHopper.API.IntegrationTests.Controllers.Resources
 
             Client = _server.CreateClient();
             Client.BaseAddress = new Uri("http://localhost");
+
+            SeedData();
         }
 
+        private void SeedData()
+        {
+            var book = new PhoneBook
+            { 
+                Name = "Seed",
+            };
+            var entry = new Entry
+            {
+                Name = "Seed",
+                PhoneNumber = "0833452693",
+                PhoneBookId = 1,
+            };
+
+            var post = Client.PostAsJsonAsync("/api/phonebooks/", book).Result;
+            post = Client.PostAsJsonAsync("/api/entries/", entry).Result;
+        }
 
         protected virtual void InitializeServices(IServiceCollection services)
         {

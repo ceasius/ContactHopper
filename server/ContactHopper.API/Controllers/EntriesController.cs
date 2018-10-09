@@ -119,7 +119,7 @@ namespace ContactHopper.API.Controllers
                 _context.Entries.Add(entry);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetEntry", new { id = entry.Id }, entry);
+                return Ok(entry);
             }
             catch (Exception ex)
             {

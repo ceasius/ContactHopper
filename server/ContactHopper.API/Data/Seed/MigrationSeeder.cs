@@ -1,6 +1,7 @@
 ﻿using ContactHopper.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ContactHopper.API.Data.Seed
 {
@@ -18,7 +19,7 @@ namespace ContactHopper.API.Data.Seed
             var entries = new List<Entry>();
 
             {
-                var bookA = new PhoneBook
+                var book = new PhoneBook
                 {
                     Id = 1,
                     Name = "Family",
@@ -31,24 +32,36 @@ namespace ContactHopper.API.Data.Seed
                         new Entry { Id = 5, Name = "Cousin", PhoneNumber = "0533452694" },
                     },
                 };
-                phoneBooks.Add(bookA);
+                book.Entries
+                    .ToList()
+                    .ForEach(b => b.PhoneBookId = book.Id);
+                phoneBooks.Add(book);
+                entries.AddRange(book.Entries);
+                book.Entries.Clear();
             }
             {
-                var bookB = new PhoneBook
+                var book = new PhoneBook
                 {
                     Id = 2,
                     Name = "Work",
                     Entries = new List<Entry>
                     {
-                        new Entry { Id = 5, Name = "Lead", PhoneNumber = "0533452695" },
-                        new Entry { Id = 6, Name = "Friend", PhoneNumber = "0533452696" },
-                        new Entry { Id = 7, Name = "New Guy", PhoneNumber = "0533452697" },
+                        new Entry { Id = 6, Name = "Lead", PhoneNumber = "0533452695" },
+                        new Entry { Id = 7, Name = "Friend", PhoneNumber = "0533452696" },
+                        new Entry { Id = 8, Name = "New Guy", PhoneNumber = "0533452697" },
                     },
                 };
-                phoneBooks.Add(bookB);
+                book.Entries
+                    .ToList()
+                    .ForEach(b => b.PhoneBookId = book.Id);
+                phoneBooks.Add(book);
+                entries.AddRange(book.Entries);
+                book.Entries.Clear();
             }
-            _modelBuilder.Entity<PhoneBook>().HasData(phoneBooks.ToArray());
+
+
             _modelBuilder.Entity<Entry>().HasData(entries.ToArray());
+            _modelBuilder.Entity<PhoneBook>().HasData(phoneBooks.ToArray());
 
             return this;
         }
