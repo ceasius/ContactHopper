@@ -10,15 +10,14 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import SearchAppBar from "./material/SearchAppBar";
+
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import { mainListItems } from "./material/ListItems";
+import EntryTable from "./EntryTable";
 
 const drawerWidth = 240;
 
@@ -99,7 +98,10 @@ const styles = theme => ({
 		marginLeft: -22
 	},
 	tableContainer: {
-		height: 320
+		height: 320,
+
+		alignItems: "left",
+		justifyContent: "left"
 	},
 	h5: {
 		marginBottom: theme.spacing.unit * 2
@@ -161,8 +163,13 @@ class Dashboard extends React.Component {
 	};
 
 	render() {
-		const { classes } = this.props;
-		const { siteProps } = this.props;
+		const { classes, siteProps, phoneBooks } = this.props;
+
+		const table = (
+			<div className={classes.tableContainer}>
+				<EntryTable rows={phoneBooks[0].entries} />
+			</div>
+		);
 
 		return (
 			<React.Fragment>
@@ -236,7 +243,7 @@ class Dashboard extends React.Component {
 						<Typography variant="h4" gutterBottom component="h2">
 							{siteProps.header}
 						</Typography>
-						<div className={classes.tableContainer} />
+						{table}
 					</main>
 				</div>
 			</React.Fragment>

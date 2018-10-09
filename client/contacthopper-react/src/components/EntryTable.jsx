@@ -16,6 +16,7 @@ import deepOrange from "@material-ui/core/colors/deepOrange";
 import deepPurple from "@material-ui/core/colors/deepPurple";
 import pink from "@material-ui/core/colors/pink";
 import green from "@material-ui/core/colors/green";
+import AddIcon from "@material-ui/icons/Add";
 
 const styles = theme => ({
 	root: {
@@ -27,30 +28,48 @@ const styles = theme => ({
 		minWidth: 700
 	},
 	avatar: {
-		margin: 10
+		margin: 10,
+		width: 30,
+		height: 30
 	},
 	button: {
 		margin: theme.spacing.unit
 	},
+	buttonInline: {
+		margin: theme.spacing.unit,
+		width: 40,
+		height: 40
+	},
+	primaryAdd: {
+		justifyContent: "left"
+	},
 	orangeAvatar: {
 		margin: 10,
 		color: "#fff",
-		backgroundColor: deepOrange[500]
+		backgroundColor: deepOrange[500],
+		width: 30,
+		height: 30
 	},
 	purpleAvatar: {
 		margin: 10,
 		color: "#fff",
-		backgroundColor: deepPurple[500]
+		backgroundColor: deepPurple[500],
+		width: 30,
+		height: 30
 	},
 	pinkAvatar: {
 		margin: 10,
 		color: "#fff",
-		backgroundColor: pink[500]
+		backgroundColor: pink[500],
+		width: 30,
+		height: 30
 	},
 	greenAvatar: {
 		margin: 10,
 		color: "#fff",
-		backgroundColor: green[500]
+		backgroundColor: green[500],
+		width: 30,
+		height: 30
 	}
 });
 
@@ -63,7 +82,6 @@ class EntryTable extends Component {
 	getAvatarColor = id => {
 		const { classes } = this.props;
 		const mod = id % 5;
-		console.log(mod);
 		switch (mod) {
 			case 1:
 				return classes.orangeAvatar;
@@ -77,58 +95,73 @@ class EntryTable extends Component {
 				return classes.avatar;
 		}
 	};
+
+	buildTableRows = () => {
+		let { classes, rows } = this.props;
+		if (!rows || 0 === rows.length) return <TableRow key={0} />;
+		return rows.map(row => {
+			return (
+				<TableRow key={row.id}>
+					<TableCell component="th" scope="row">
+						<Avatar className={this.getAvatarColor(row.id)}>
+							{this.getAvatarText(row.name)}
+						</Avatar>
+					</TableCell>
+					<TableCell numeric>{row.id}</TableCell>
+					<TableCell>{row.name}</TableCell>
+					<TableCell numeric>{row.phoneNumber}</TableCell>
+					<TableCell>
+						<div>
+							<Button
+								variant="fab"
+								color="secondary"
+								aria-label="edit"
+								className={classes.buttonInline}
+							>
+								<EditIcon />
+							</Button>
+							<Button
+								variant="fab"
+								aria-label="delete"
+								className={classes.buttonInline}
+							>
+								<DeleteIcon />
+							</Button>
+						</div>
+					</TableCell>
+				</TableRow>
+			);
+		});
+	};
 	render() {
-		const { classes, rows } = this.props;
+		const { classes } = this.props;
 
 		return (
-			<Paper className={classes.root}>
-				<Table className={classes.table}>
-					<TableHead>
-						<TableRow>
-							<TableCell />
-							<TableCell numeric>ID</TableCell>
-							<TableCell>Contact Name</TableCell>
-							<TableCell numeric>Phone Number</TableCell>
-							<TableCell />
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{rows.map(row => {
-							return (
-								<TableRow key={row.id}>
-									<TableCell component="th" scope="row">
-										<Avatar className={this.getAvatarColor(row.id)}>
-											{this.getAvatarText(row.name)}
-										</Avatar>
-									</TableCell>
-									<TableCell numeric>{row.id}</TableCell>
-									<TableCell>{row.name}</TableCell>
-									<TableCell numeric>{row.phoneNumber}</TableCell>
-									<TableCell>
-										<div>
-											<Button
-												variant="fab"
-												color="secondary"
-												aria-label="edit"
-												className={classes.button}
-											>
-												<EditIcon />
-											</Button>
-											<Button
-												variant="fab"
-												aria-label="delete"
-												className={classes.button}
-											>
-												<DeleteIcon />
-											</Button>
-										</div>
-									</TableCell>
-								</TableRow>
-							);
-						})}
-					</TableBody>
-				</Table>
-			</Paper>
+			<React.Fragment>
+				<Button
+					variant="extendedFab"
+					aria-label="primary"
+					color="primary"
+					className={classes.button}
+				>
+					<AddIcon className={classes.primaryAdd} />
+					Add Contact
+				</Button>
+				<Paper className={classes.root}>
+					<Table className={classes.table}>
+						<TableHead>
+							<TableRow>
+								<TableCell />
+								<TableCell numeric>ID</TableCell>
+								<TableCell>Contact Name</TableCell>
+								<TableCell numeric>Phone Number</TableCell>
+								<TableCell />
+							</TableRow>
+						</TableHead>
+						<TableBody>{this.buildTableRows()}</TableBody>
+					</Table>
+				</Paper>
+			</React.Fragment>
 		);
 	}
 }

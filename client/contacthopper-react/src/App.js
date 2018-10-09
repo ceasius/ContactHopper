@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import NavBar from "./components/material/SearchAppBar";
 import EntryTable from "./components/EntryTable";
 import "./App.css";
 import Dashboard from "./components/Dashboard";
@@ -14,7 +13,10 @@ class App extends Component {
 					{ id: 1, name: "Mom", phoneNumber: "0833452690" },
 					{ id: 2, name: "Dad", phoneNumber: "0833452691" },
 					{ id: 3, name: "Wife", phoneNumber: "0833452692" },
-					{ id: 4, name: "Son", phoneNumber: "0833452693" }
+					{ id: 4, name: "Son", phoneNumber: "0833452693" },
+					{ id: 5, name: "Lead", phoneNumber: "0833452694" },
+					{ id: 6, name: "Friend", phoneNumber: "0833452695" },
+					{ id: 7, name: "New Guy", phoneNumber: "0833452696" }
 				]
 			},
 			{
@@ -34,7 +36,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		fetch("https://localhost:5001/api/phonebooks/")
+		/*fetch("https://localhost:5001/api/phonebooks/")
 			.then(res => res.json())
 			.then(json => {
 				this.setState({
@@ -42,6 +44,7 @@ class App extends Component {
 					items: json
 				});
 			});
+			*/
 	}
 
 	render() {
@@ -63,7 +66,7 @@ class App extends Component {
 		};
 		return (
 			<div className="App">
-				<Dashboard siteProps={siteProps} phoneBooks="" />
+				<Dashboard siteProps={siteProps} phoneBooks={phoneBooks} />
 			</div>
 		);
 		/*
