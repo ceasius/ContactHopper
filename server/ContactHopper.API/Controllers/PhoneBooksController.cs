@@ -25,12 +25,11 @@ namespace ContactHopper.API.Controllers
 
         // GET: api/PhoneBooks
         [HttpGet]
-        public async Task<IActionResult> GetPhoneBooks()
+        public IActionResult GetPhoneBooks()
         {
             try
             {
-                var entries = await _context.PhoneBooks.AllAsync(e => true);
-                return Ok(entries);
+                return Ok(_context.PhoneBooks);
             }
             catch (Exception ex)
             {

@@ -34,7 +34,7 @@ namespace ContactHopper.API.Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                    .SetBasePath(Directory.GetCurrentDirectory())
