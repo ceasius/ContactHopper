@@ -16,13 +16,13 @@ This project has been developed using the following tools and may be required to
 
 ## Migrating the EF Core Database
 
-The database will be accessed by the Web API. For this implementation Entity Framework Core 2.1.1 Code First Migrations was selected.
+The database will be accessed by the Web API. For this implementation Entity Framework Core 2.1.4 Code First Migrations was selected.
 
     1. Run NuGet restore on the project to download any missing packages
     2. Connection string : ContactHopperDb should point to the desired database according to your server setup
     3. Create the Database using SSMS or equivalent tool
     4. Open up the Nuget Package Manager Console
-    	4.1 Ensure that AG.DbEntities is set as the StartUp Project and selected as the Default Project in the PM Console drop down
+    	4.1 Ensure that ContactHopper.API is set as the StartUp Project and selected as the Default Project in the PM Console drop down
     	4.2 PM> add-migration {migrationName} - to add any required changes for the database
     	4.3 PM> update-database - if the migration file needs to be applied
 
