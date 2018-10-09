@@ -25,12 +25,11 @@ namespace ContactHopper.API.Controllers
 
         // GET: api/PhoneBooks
         [HttpGet]
-        public async Task<IActionResult> GetPhoneBooks()
+        public IActionResult GetPhoneBooks()
         {
             try
             {
-                var entries = await _context.PhoneBooks.AllAsync(e => true);
-                return Ok(entries);
+                return Ok(_context.PhoneBooks);
             }
             catch (Exception ex)
             {
@@ -87,7 +86,7 @@ namespace ContactHopper.API.Controllers
                 await _context.SaveChangesAsync();
 
 
-                return NoContent();
+                return Ok(phoneBook);
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -122,7 +121,7 @@ namespace ContactHopper.API.Controllers
                 _context.PhoneBooks.Add(phoneBook);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetPhoneBook", new { id = phoneBook.Id }, phoneBook);
+                return Ok(phoneBook);
             }
             catch (Exception ex)
             {

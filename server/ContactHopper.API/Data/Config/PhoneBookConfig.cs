@@ -10,6 +10,12 @@ namespace ContactHopper.API.Data.Config
         {
             builder.HasKey(m => m.Id)
                 .ForSqlServerIsClustered(true);
+
+            builder
+                .HasMany<Entry>(e => e.Entries)
+                .WithOne(p => p.PhoneBook)
+                .HasForeignKey(s => s.PhoneBookId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

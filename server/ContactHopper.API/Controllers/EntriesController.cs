@@ -24,12 +24,11 @@ namespace ContactHopper.API.Controllers
 
         // GET: api/Entries
         [HttpGet]
-        public async Task<IActionResult> GetEntries()
+        public IActionResult GetEntries()
         {
             try
             {
-                var entries = await _context.Entries.AllAsync(e => true);
-                return Ok(entries);
+                return Ok(_context.Entries);
             }
             catch (Exception ex)
             {
@@ -120,7 +119,7 @@ namespace ContactHopper.API.Controllers
                 _context.Entries.Add(entry);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetEntry", new { id = entry.Id }, entry);
+                return Ok(entry);
             }
             catch (Exception ex)
             {
