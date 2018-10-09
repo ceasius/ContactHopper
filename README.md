@@ -43,7 +43,7 @@ The Web API provides a secure method to access data for this application. It was
 
 The React component provides the front end for the system.
 
-    1. Open the project with visual studio code at location \AG.Web\ClientApp
+    1. Open the project with visual studio code at location \client\contacthopper-react
     2. Ensure the Web API is running in order to supply data
     2. Run the following commands in the console:
     	2.1 npm install - get all missing packages
