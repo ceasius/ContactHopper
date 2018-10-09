@@ -1,4 +1,4 @@
-\*Welcome to Contact Hopper - Simple React & .Net Core Project\*\*
+## Welcome to Contact Hopper - Simple React & .Net Core Project
 
 ---
 
