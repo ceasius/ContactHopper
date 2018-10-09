@@ -23,7 +23,7 @@ The database will be accessed by the Web API. For this implementation Entity Fra
     3. Create the Database using SSMS or equivalent tool
     4. Open up the Nuget Package Manager Console
     	4.1 Ensure that ContactHopper.API is set as the StartUp Project and selected as the Default Project in the PM Console drop down
-    	4.2 PM> add-migration {migrationName} - to add any required changes for the database
+    	4.2 PM> add-migration {migrationName} - (Optional, can be skipped as migrations are already set up) to add any required changes for the database
     	4.3 PM> update-database - if the migration file needs to be applied
 
 ---
@@ -34,7 +34,7 @@ The Web API provides a secure method to access data for this application. It was
 
     1. Run NuGet restore on the project to download any missing packages
     2. Follow the instructions on Migrating the EF Core Database
-        2.1 Alternatively, In Memory database option is available in appsettings.json
+            2.1 Alternatively, In Memory database option is available in appsettings.json
     3. Set ContactHopper.API as the StartUp Project and Run
 
 ---
