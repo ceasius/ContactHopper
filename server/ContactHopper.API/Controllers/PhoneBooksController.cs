@@ -29,7 +29,8 @@ namespace ContactHopper.API.Controllers
         {
             try
             {
-                return Ok(_context.PhoneBooks);
+                var phoneBooks = _context.PhoneBooks.Include(p => p.Entries);
+                return Ok(phoneBooks);
             }
             catch (Exception ex)
             {
@@ -48,8 +49,10 @@ namespace ContactHopper.API.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-
-                var phoneBook = await _context.PhoneBooks.FindAsync(id);
+                
+                var phoneBook = await _context.PhoneBooks
+                    .Include(p => p.Entries)
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (phoneBook == null)
                 {

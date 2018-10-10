@@ -27,7 +27,8 @@ namespace ContactHopper.API
 
             services
                 .AddLogging()
-                .AddSwaggerDocs();
+                .AddSwaggerDocs()
+                .AddCors();
 
             if (Environment.IsDevelopment())
                 services.AddContactSqlServerDb(Configuration);
@@ -45,6 +46,13 @@ namespace ContactHopper.API
                 app.UseDeveloperExceptionPage();
 
                 loggerFactory.UseDevLogs();
+
+                app.UseCors(options => 
+                    options
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                );
             }
             else
             {

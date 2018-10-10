@@ -16,8 +16,12 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-import { mainListItems } from "./material/ListItems";
+import ListItems from "./ListItems";
 import EntryTable from "./EntryTable";
+import CardGrid from "./CardGrid";
+
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -151,7 +155,10 @@ const styles = theme => ({
 
 class Dashboard extends React.Component {
 	state = {
-		open: true
+		open: true,
+		selectedPhoneBookId: 1,
+		redirect: false,
+		url: "/"
 	};
 
 	handleDrawerOpen = () => {
@@ -162,90 +169,197 @@ class Dashboard extends React.Component {
 		this.setState({ open: false });
 	};
 
-	render() {
-		const { classes, siteProps, phoneBooks } = this.props;
+	redirectPhoneBooks = () => {
+		this.setState({
+			redirect: true,
+			url: "/phonebooks/"
+		});
+	};
+	redirectTables = () => {
+		this.setState({
+			redirect: true,
+			url: "/entries/"
+		});
+	};
+	redirectSettings = () => {
+		this.setState({
+			redirect: true,
+			url: "/"
+		});
+	};
+	renderRedirect = () => {
+		if (this.state.redirect) {
+			return <Redirect to={this.state.url} />;
+		}
+	};
+
+	cardRoute = () => {
+		const { onPhoneBookUpdate, onPhoneBookAdd, onPhoneBookDelete } = this.props;
+		return (
+			<CardGrid
+				phoneBooks={this.props.phoneBooks}
+				onPhoneBookDelete={onPhoneBookDelete}
+				onPhoneBookAdd={onPhoneBookAdd}
+				onPhoneBookUpdate={onPhoneBookUpdate}
+				onCardSelect={this.selectPhoneBook}
+				onRedirectTables={this.redirectTables}
+			/>
+		);
+	};
+
+	getPhoneBookName = () => {
+		const { phoneBooks } = this.props;
+		const { selectedPhoneBookId } = this.state;
+		const phoneBook = phoneBooks.find(
+			phone => phone.id === selectedPhoneBookId
+		);
+		return phoneBook.name;
+	};
+
+	createContent = () => {
+		const {
+			classes,
+			phoneBooks,
+			onEntryDelete,
+			onEntryAdd,
+			onEntryUpdate
+		} = this.props;
+		const { selectedPhoneBookId } = this.state;
+		const phoneBook = phoneBooks.find(
+			phone => phone.id === selectedPhoneBookId
+		);
+		let data = phoneBook.entries;
+		if (!phoneBooks || 0 === phoneBooks.length) data = phoneBook.entries;
 
 		const table = (
 			<div className={classes.tableContainer}>
-				<EntryTable rows={phoneBooks[0].entries} />
+				<EntryTable
+					phoneBook={phoneBook}
+					rows={data}
+					onEntryDelete={onEntryDelete}
+					onEntryAdd={onEntryAdd}
+					onEntryUpdate={onEntryUpdate}
+				/>
 			</div>
 		);
 
+		return table;
+	};
+
+	selectPhoneBook = id => {
+		console.log(id);
+		this.setState({ selectedPhoneBookId: id });
+	};
+
+	render() {
+		const { classes, siteProps } = this.props;
 		return (
 			<React.Fragment>
 				<CssBaseline />
-				<div className={classes.root}>
-					<AppBar
-						position="absolute"
-						className={classNames(
-							classes.appBar,
-							this.state.open && classes.appBarShift
-						)}
-					>
-						<Toolbar
-							disableGutters={!this.state.open}
-							className={classes.toolbar}
+				<BrowserRouter>
+					<div className={classes.root}>
+						<AppBar
+							position="absolute"
+							className={classNames(
+								classes.appBar,
+								this.state.open && classes.appBarShift
+							)}
 						>
-							<IconButton
-								color="inherit"
-								aria-label="Open drawer"
-								onClick={this.handleDrawerOpen}
-								className={classNames(
-									classes.menuButton,
-									this.state.open && classes.menuButtonHidden
-								)}
+							<Toolbar
+								disableGutters={!this.state.open}
+								className={classes.toolbar}
 							>
-								<MenuIcon />
-							</IconButton>
-							<Typography
-								className={classes.title}
-								variant="h6"
-								color="inherit"
-								noWrap
-							>
-								Contact Hopper
-							</Typography>
-							<div className={classes.grow} />
-							<div className={classes.search}>
-								<div className={classes.searchIcon}>
-									<SearchIcon />
+								<IconButton
+									color="inherit"
+									aria-label="Open drawer"
+									onClick={this.handleDrawerOpen}
+									className={classNames(
+										classes.menuButton,
+										this.state.open && classes.menuButtonHidden
+									)}
+								>
+									<MenuIcon />
+								</IconButton>
+								<Typography
+									className={classes.title}
+									variant="title"
+									color="inherit"
+									noWrap
+								>
+									Contact Hopper
+								</Typography>
+								<div className={classes.grow} />
+								<div className={classes.search}>
+									<div className={classes.searchIcon}>
+										<SearchIcon />
+									</div>
+									<InputBase
+										placeholder="Search…"
+										classes={{
+											root: classes.inputRoot,
+											input: classes.inputInput
+										}}
+									/>
 								</div>
-								<InputBase
-									placeholder="Search…"
-									classes={{
-										root: classes.inputRoot,
-										input: classes.inputInput
-									}}
-								/>
+							</Toolbar>
+						</AppBar>
+						<Drawer
+							variant="permanent"
+							classes={{
+								paper: classNames(
+									classes.drawerPaper,
+									!this.state.open && classes.drawerPaperClose
+								)
+							}}
+							open={this.state.open}
+						>
+							<div className={classes.toolbarIcon}>
+								<IconButton onClick={this.handleDrawerClose}>
+									<ChevronLeftIcon />
+								</IconButton>
 							</div>
-						</Toolbar>
-					</AppBar>
-					<Drawer
-						variant="permanent"
-						classes={{
-							paper: classNames(
-								classes.drawerPaper,
-								!this.state.open && classes.drawerPaperClose
-							)
-						}}
-						open={this.state.open}
-					>
-						<div className={classes.toolbarIcon}>
-							<IconButton onClick={this.handleDrawerClose}>
-								<ChevronLeftIcon />
-							</IconButton>
-						</div>
-						<Divider />
-						<List>{mainListItems}</List>
-					</Drawer>
-					<main className={classes.content}>
-						<div className={classes.appBarSpacer} />
-						<Typography variant="h4" gutterBottom component="h2">
-							{siteProps.header}
-						</Typography>
-						{table}
-					</main>
-				</div>
+							<Divider />
+							<List>
+								<ListItems
+									onRedirectTables={this.redirectTables}
+									onRedirectSettings={this.redirectSettings}
+									onRedirectPhoneBooks={this.redirectPhoneBooks}
+								/>
+								{this.renderRedirect()}
+							</List>
+						</Drawer>
+						<main className={classes.content}>
+							<div className={classes.appBarSpacer} />
+							<div>
+								<Switch>
+									<Route path="/" exact>
+										<Typography variant="display1" gutterBottom component="h2">
+											Phone Books
+										</Typography>
+									</Route>
+									<Route path="/phonebooks/">
+										<Typography variant="display1" gutterBottom component="h2">
+											Phone Books
+										</Typography>
+									</Route>
+									<Route path="/entries/">
+										<Typography variant="display1" gutterBottom component="h2">
+											Contacts: {this.getPhoneBookName()}
+										</Typography>
+									</Route>
+								</Switch>
+							</div>
+
+							<div>
+								<Switch>
+									<Route path="/" component={this.cardRoute} exact />
+									<Route path="/phonebooks/" component={this.cardRoute} />
+									<Route path="/entries/" component={this.createContent} />
+								</Switch>
+							</div>
+						</main>
+					</div>
+				</BrowserRouter>
 			</React.Fragment>
 		);
 	}
