@@ -74,7 +74,9 @@ const styles = theme => ({
 });
 
 class EntryTable extends Component {
-	state = {};
+	constructor(props) {
+		super(props);
+	}
 	getAvatarText = name => {
 		if (!name || 0 === name.length) return "";
 		return name[0];
@@ -97,7 +99,7 @@ class EntryTable extends Component {
 	};
 
 	buildTableRows = () => {
-		let { classes, rows } = this.props;
+		let { classes, rows, onEntryDelete } = this.props;
 		if (!rows || 0 === rows.length) return <TableRow key={0} />;
 		return rows.map(row => {
 			return (
@@ -124,6 +126,9 @@ class EntryTable extends Component {
 								variant="fab"
 								aria-label="delete"
 								className={classes.buttonInline}
+								onClick={() => {
+									onEntryDelete(row.phoneBookId, row.id);
+								}}
 							>
 								<DeleteIcon />
 							</Button>

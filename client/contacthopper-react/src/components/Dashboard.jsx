@@ -21,6 +21,7 @@ import EntryTable from "./EntryTable";
 import CardGrid from "./CardGrid";
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -154,7 +155,10 @@ const styles = theme => ({
 
 class Dashboard extends React.Component {
 	state = {
-		open: true
+		open: true,
+		selectedPhoneBookId: 1,
+		redirect: false,
+		url: "/"
 	};
 
 	handleDrawerOpen = () => {
@@ -165,39 +169,90 @@ class Dashboard extends React.Component {
 		this.setState({ open: false });
 	};
 
-	tableRoute = () => {
-		const { classes, phoneBooks } = this.props;
-
-		let data = phoneBooks.map(book => book.entries);
-		return (
-			<div className={classes.tableContainer}>
-				<EntryTable rows={data} />
-			</div>
-		);
+	redirectPhoneBooks = () => {
+		this.setState({
+			redirect: true,
+			url: "/phonebooks/"
+		});
+	};
+	redirectTables = () => {
+		this.setState({
+			redirect: true,
+			url: "/entries/"
+		});
+	};
+	redirectSettings = () => {
+		this.setState({
+			redirect: true,
+			url: "/"
+		});
+	};
+	renderRedirect = () => {
+		if (this.state.redirect) {
+			return <Redirect to={this.state.url} />;
+		}
 	};
 
 	cardRoute = () => {
-		return <CardGrid />;
+		const { onPhoneBookUpdate, onPhoneBookAdd, onPhoneBookDelete } = this.props;
+		return (
+			<CardGrid
+				phoneBooks={this.props.phoneBooks}
+				onPhoneBookDelete={onPhoneBookDelete}
+				onPhoneBookAdd={onPhoneBookAdd}
+				onPhoneBookUpdate={onPhoneBookUpdate}
+				onCardSelect={this.selectPhoneBook}
+				onRedirectTables={this.redirectTables}
+			/>
+		);
+	};
+
+	getPhoneBookName = () => {
+		const { phoneBooks } = this.props;
+		const { selectedPhoneBookId } = this.state;
+		const phoneBook = phoneBooks.find(
+			phone => phone.id === selectedPhoneBookId
+		);
+		return phoneBook.name;
 	};
 
 	createContent = () => {
-		const { classes, phoneBooks } = this.props;
-
-		let data = phoneBooks[0].entries;
-		if (!phoneBooks || 0 === phoneBooks.length) data = phoneBooks[0].entries;
+		const {
+			classes,
+			phoneBooks,
+			onEntryDelete,
+			onEntryAdd,
+			onEntryUpdate
+		} = this.props;
+		const { selectedPhoneBookId } = this.state;
+		const phoneBook = phoneBooks.find(
+			phone => phone.id === selectedPhoneBookId
+		);
+		let data = phoneBook.entries;
+		if (!phoneBooks || 0 === phoneBooks.length) data = phoneBook.entries;
 
 		const table = (
 			<div className={classes.tableContainer}>
-				<EntryTable rows={data} />
+				<EntryTable
+					phoneBook={phoneBook}
+					rows={data}
+					onEntryDelete={onEntryDelete}
+					onEntryAdd={onEntryAdd}
+					onEntryUpdate={onEntryUpdate}
+				/>
 			</div>
 		);
 
 		return table;
 	};
 
+	selectPhoneBook = id => {
+		console.log(id);
+		this.setState({ selectedPhoneBookId: id });
+	};
+
 	render() {
 		const { classes, siteProps } = this.props;
-
 		return (
 			<React.Fragment>
 				<CssBaseline />
@@ -227,7 +282,7 @@ class Dashboard extends React.Component {
 								</IconButton>
 								<Typography
 									className={classes.title}
-									variant="h6"
+									variant="title"
 									color="inherit"
 									noWrap
 								>
@@ -236,7 +291,7 @@ class Dashboard extends React.Component {
 								<div className={classes.grow} />
 								<div className={classes.search}>
 									<div className={classes.searchIcon}>
-										<SearchIcon {...this.props} />
+										<SearchIcon />
 									</div>
 									<InputBase
 										placeholder="Search…"
@@ -265,18 +320,40 @@ class Dashboard extends React.Component {
 							</div>
 							<Divider />
 							<List>
-								<ListItems />
+								<ListItems
+									onRedirectTables={this.redirectTables}
+									onRedirectSettings={this.redirectSettings}
+									onRedirectPhoneBooks={this.redirectPhoneBooks}
+								/>
+								{this.renderRedirect()}
 							</List>
 						</Drawer>
 						<main className={classes.content}>
 							<div className={classes.appBarSpacer} />
-							<Typography variant="h4" gutterBottom component="h2">
-								{siteProps.header}
-							</Typography>
 							<div>
 								<Switch>
-									<Route path="/" component={CardGrid} exact />
-									<Route path="/phonebooks/" component={CardGrid} />
+									<Route path="/" exact>
+										<Typography variant="display1" gutterBottom component="h2">
+											Phone Books
+										</Typography>
+									</Route>
+									<Route path="/phonebooks/">
+										<Typography variant="display1" gutterBottom component="h2">
+											Phone Books
+										</Typography>
+									</Route>
+									<Route path="/entries/">
+										<Typography variant="display1" gutterBottom component="h2">
+											Contacts: {this.getPhoneBookName()}
+										</Typography>
+									</Route>
+								</Switch>
+							</div>
+
+							<div>
+								<Switch>
+									<Route path="/" component={this.cardRoute} exact />
+									<Route path="/phonebooks/" component={this.cardRoute} />
 									<Route path="/entries/" component={this.createContent} />
 								</Switch>
 							</div>

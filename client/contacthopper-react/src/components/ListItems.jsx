@@ -6,56 +6,34 @@ import DashboardIcon from "@material-ui/icons/Book";
 import ShoppingCartIcon from "@material-ui/icons/Contacts";
 
 import SettingsIcon from "@material-ui/icons/Settings";
-import { Redirect } from "react-router-dom";
 
 class ListItems extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			redirect: false,
-			url: "/"
-		};
+		this.state = {};
 	}
-	redirectPhoneBooks = () => {
-		this.setState({
-			redirect: true,
-			url: "/phonebooks/"
-		});
-	};
-	redirectTables = () => {
-		this.setState({
-			redirect: true,
-			url: "/entries/"
-		});
-	};
-	redirectSettings = () => {
-		this.setState({
-			redirect: true,
-			url: "/"
-		});
-	};
-	renderRedirect = () => {
-		if (this.state.redirect) {
-			return <Redirect to={this.state.url} />;
-		}
-	};
+
 	render() {
+		const {
+			onRedirectPhoneBooks,
+			onRedirectTables,
+			onRedirectSettings
+		} = this.props;
 		return (
 			<div>
-				{this.renderRedirect()}
-				<ListItem button onClick={this.redirectPhoneBooks}>
+				<ListItem button onClick={onRedirectPhoneBooks}>
 					<ListItemIcon>
 						<DashboardIcon />
 					</ListItemIcon>
-					<ListItemText primary="Dashboard" />
+					<ListItemText primary="Phone Books" />
 				</ListItem>
-				<ListItem button onClick={this.redirectTables}>
+				<ListItem button onClick={onRedirectTables}>
 					<ListItemIcon>
 						<ShoppingCartIcon />
 					</ListItemIcon>
 					<ListItemText primary="Contacts" />
 				</ListItem>
-				<ListItem button onClick={this.redirectSettings}>
+				<ListItem button onClick={onRedirectSettings}>
 					<ListItemIcon>
 						<SettingsIcon />
 					</ListItemIcon>
