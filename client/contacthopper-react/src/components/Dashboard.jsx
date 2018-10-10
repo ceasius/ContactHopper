@@ -156,6 +156,7 @@ const styles = theme => ({
 class Dashboard extends React.Component {
   state = {
     open: true,
+    searchFilter: "",
     selectedPhoneBookId: 1,
     redirect: false,
     url: "/"
@@ -163,6 +164,10 @@ class Dashboard extends React.Component {
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
+  };
+
+  handleSearchChange = event => {
+    this.setState({ searchFilter: event.target.value });
   };
 
   handleDrawerClose = () => {
@@ -203,6 +208,7 @@ class Dashboard extends React.Component {
         onPhoneBookUpdate={onPhoneBookUpdate}
         onCardSelect={this.selectPhoneBook}
         onRedirectTables={this.redirectTables}
+        search={this.state.searchFilter}
       />
     );
   };
@@ -213,8 +219,8 @@ class Dashboard extends React.Component {
     const phoneBook = phoneBooks.find(
       phone => phone.id === selectedPhoneBookId
     );
-    if (phoneBook !== null && phoneBook.name !== null) return phoneBook.name;
-    else return "";
+    if (!phoneBook || !phoneBook.name) return "";
+    return phoneBook.name;
   };
 
   createContent = () => {
@@ -226,17 +232,24 @@ class Dashboard extends React.Component {
       onEntryUpdate
     } = this.props;
     const { selectedPhoneBookId } = this.state;
-    const phoneBook = phoneBooks.find(
-      phone => phone.id === selectedPhoneBookId
-    );
-    let data = phoneBook.entries;
-    if (!phoneBooks || 0 === phoneBooks.length) data = phoneBook.entries;
 
+    let data = [];
+    let phoneBook = {};
+    if (!phoneBooks || 0 === phoneBooks.length) {
+      return (
+        <Typography variant="h4" gutterBottom component="h2">
+          Loading
+        </Typography>
+      );
+    }
+    phoneBook = phoneBooks.find(phone => phone.id === selectedPhoneBookId);
+    data = phoneBook.entries;
     const table = (
       <div className={classes.tableContainer}>
         <EntryTable
           phoneBook={phoneBook}
           rows={data}
+          search={this.state.searchFilter}
           onEntryDelete={onEntryDelete}
           onEntryAdd={onEntryAdd}
           onEntryUpdate={onEntryUpdate}
@@ -295,6 +308,7 @@ class Dashboard extends React.Component {
                   </div>
                   <InputBase
                     placeholder="Search…"
+                    onChange={this.handleSearchChange.bind(this)}
                     classes={{
                       root: classes.inputRoot,
                       input: classes.inputInput
@@ -324,6 +338,7 @@ class Dashboard extends React.Component {
                   onRedirectTables={this.redirectTables}
                   onRedirectSettings={this.redirectSettings}
                   onRedirectPhoneBooks={this.redirectPhoneBooks}
+                  onThemeUpdate={this.props.onThemeUpdate}
                 />
                 {this.renderRedirect()}
               </List>

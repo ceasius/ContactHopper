@@ -39,32 +39,11 @@ const lighttheme = createMuiTheme({
 
 class App extends Component {
   state = {
-    isloaded: false,
+    isLoaded: false,
+    items: [],
     theme: "dark",
-    phoneBooks: [
-      {
-        id: 1,
-        name: "Family",
-        entries: [
-          { id: 1, name: "Mom", phoneNumber: "0833452690", phoneBookId: 1 },
-          { id: 2, name: "Dad", phoneNumber: "0833452691", phoneBookId: 1 },
-          { id: 3, name: "Wife", phoneNumber: "0833452692", phoneBookId: 1 },
-          { id: 4, name: "Son", phoneNumber: "0833452693", phoneBookId: 1 },
-          { id: 5, name: "Lead", phoneNumber: "0833452694", phoneBookId: 1 },
-          { id: 6, name: "Friend", phoneNumber: "0833452695", phoneBookId: 1 },
-          { id: 7, name: "New Guy", phoneNumber: "0833452696", phoneBookId: 1 }
-        ]
-      },
-      {
-        id: 2,
-        name: "Work",
-        entries: [
-          { id: 5, name: "Lead", phoneNumber: "0833452694", phoneBookId: 2 },
-          { id: 6, name: "Friend", phoneNumber: "0833452695", phoneBookId: 2 },
-          { id: 7, name: "New Guy", phoneNumber: "0833452696", phoneBookId: 2 }
-        ]
-      }
-    ]
+    //example dummy data
+    phoneBooks: []
   };
 
   constructor(props) {
@@ -75,24 +54,26 @@ class App extends Component {
     if (this.state.theme === "dark") return darktheme;
     else return lighttheme;
   }
+
+  updateTheme = theme => {
+    this.setState({ theme: theme });
+  };
+
   componentDidMount() {
-    /*
+    this.fetchPhoneBooks();
+  }
+
+  fetchPhoneBooks = () => {
     fetch("https://localhost:44320/api/phonebooks/")
       .then(res => res.json())
       .then(json => {
         this.setState({
           isLoaded: true,
-          items: json
+          phoneBooks: json
         });
       })
-      .then(() => {
-        console.log(this.state.isLoaded);
-        console.log(this.state.items);
-      });
-      */
-  }
-
-  fetchPhoneBooksFromApi = () => {};
+      .catch(err => console.log(err));
+  };
 
   handlePhoneBookDelete = id => {
     const { phoneBooks } = this.state;
@@ -138,30 +119,19 @@ class App extends Component {
   };
 
   render() {
-    const { phoneBooks } = this.state;
-    let { items, isloaded } = this.state;
-    isloaded = true;
-    let content = {};
-    if (!isloaded) {
-      content = <div>Loading</div>;
-    } else {
-    }
-    let siteProps = {
-      header: "Contact List: Family"
-    };
     return (
       <MuiThemeProvider theme={this.setTheme()}>
         <div className="App">
           <Dashboard
-            siteProps={siteProps}
-            phoneBooks={phoneBooks}
-            isLoaded={false}
+            phoneBooks={this.state.phoneBooks}
+            isLoaded={this.state.isLoaded}
             onPhoneBookDelete={this.handlePhoneBookDelete}
             onPhoneBookAdd={this.handlePhoneBookAdd}
             onPhoneBookUpdate={this.handlePhoneBookEdit}
             onEntryDelete={this.handleEntryDelete}
             onEntryAdd={this.handleEntryAdd}
             onEntryUpdate={this.handleEntryEdit}
+            onThemeUpdate={this.updateTheme}
           />
         </div>
       </MuiThemeProvider>

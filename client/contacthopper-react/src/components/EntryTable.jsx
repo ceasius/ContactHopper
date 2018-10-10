@@ -182,9 +182,13 @@ class EntryTable extends Component {
   };
 
   buildTableRows = () => {
-    let { classes, rows, onEntryDelete } = this.props;
+    let { classes, rows, onEntryDelete, search } = this.props;
     if (!rows || 0 === rows.length) return <TableRow key={0} />;
-    return rows.map(row => {
+
+    const filteredRows = rows.filter(e =>
+      e.name.toUpperCase().includes(search.toUpperCase())
+    );
+    return filteredRows.map(row => {
       return (
         <TableRow key={row.id}>
           <TableCell component="th" scope="row">

@@ -150,7 +150,11 @@ class Album extends React.Component {
   };
 
   render() {
-    const { classes, phoneBooks, onPhoneBookDelete, onCardSelect } = this.props;
+    const { classes, phoneBooks, onPhoneBookDelete, search } = this.props;
+
+    const filteredPhoneBooks = phoneBooks.filter(e =>
+      e.name.toUpperCase().includes(search.toUpperCase())
+    );
     return (
       <React.Fragment>
         <CssBaseline />
@@ -159,7 +163,7 @@ class Album extends React.Component {
           <div className={classNames(classes.layout, classes.cardGrid)}>
             {/* End hero unit */}
             <Grid container spacing={40}>
-              {phoneBooks.map(card => (
+              {filteredPhoneBooks.map(card => (
                 <Grid item key={card.id} sm={6} md={4} lg={3}>
                   <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
