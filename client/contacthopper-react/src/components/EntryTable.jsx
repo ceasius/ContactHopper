@@ -18,157 +18,293 @@ import pink from "@material-ui/core/colors/pink";
 import green from "@material-ui/core/colors/green";
 import AddIcon from "@material-ui/icons/Add";
 
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 const styles = theme => ({
-	root: {
-		width: "100%",
-		marginTop: theme.spacing.unit * 3,
-		overflowX: "auto"
-	},
-	table: {
-		minWidth: 700
-	},
-	avatar: {
-		margin: 10,
-		width: 30,
-		height: 30
-	},
-	button: {
-		margin: theme.spacing.unit
-	},
-	buttonInline: {
-		margin: theme.spacing.unit,
-		width: 40,
-		height: 40
-	},
-	primaryAdd: {
-		justifyContent: "left"
-	},
-	orangeAvatar: {
-		margin: 10,
-		color: "#fff",
-		backgroundColor: deepOrange[500],
-		width: 30,
-		height: 30
-	},
-	purpleAvatar: {
-		margin: 10,
-		color: "#fff",
-		backgroundColor: deepPurple[500],
-		width: 30,
-		height: 30
-	},
-	pinkAvatar: {
-		margin: 10,
-		color: "#fff",
-		backgroundColor: pink[500],
-		width: 30,
-		height: 30
-	},
-	greenAvatar: {
-		margin: 10,
-		color: "#fff",
-		backgroundColor: green[500],
-		width: 30,
-		height: 30
-	}
+  root: {
+    width: "100%",
+    marginTop: theme.spacing.unit * 3,
+    overflowX: "auto"
+  },
+  table: {
+    minWidth: 700
+  },
+  avatar: {
+    margin: 10,
+    width: 40,
+    height: 40
+  },
+  button: {
+    margin: theme.spacing.unit
+  },
+  buttonInline: {
+    margin: theme.spacing.unit,
+    width: 40,
+    height: 40
+  },
+  primaryAdd: {
+    justifyContent: "left"
+  },
+  orangeAvatar: {
+    margin: 10,
+    color: "#fff",
+    backgroundColor: deepOrange[500],
+    width: 40,
+    height: 40
+  },
+  purpleAvatar: {
+    margin: 10,
+    color: "#fff",
+    backgroundColor: deepPurple[500],
+    width: 40,
+    height: 40
+  },
+  pinkAvatar: {
+    margin: 10,
+    color: "#fff",
+    backgroundColor: pink[500],
+    width: 40,
+    height: 40
+  },
+  greenAvatar: {
+    margin: 10,
+    color: "#fff",
+    backgroundColor: green[500],
+    width: 40,
+    height: 40
+  }
 });
 
 class EntryTable extends Component {
-	constructor(props) {
-		super(props);
-	}
-	getAvatarText = name => {
-		if (!name || 0 === name.length) return "";
-		return name[0];
-	};
-	getAvatarColor = id => {
-		const { classes } = this.props;
-		const mod = id % 5;
-		switch (mod) {
-			case 1:
-				return classes.orangeAvatar;
-			case 2:
-				return classes.purpleAvatar;
-			case 3:
-				return classes.greenAvatar;
-			case 4:
-				return classes.pinkAvatar;
-			default:
-				return classes.avatar;
-		}
-	};
+  state = {
+    open: false,
+    addNew: false,
+    selectedId: 0,
+    entry: {
+      id: 0,
+      name: "",
+      phoneNumber: ""
+    }
+  };
 
-	buildTableRows = () => {
-		let { classes, rows, onEntryDelete } = this.props;
-		if (!rows || 0 === rows.length) return <TableRow key={0} />;
-		return rows.map(row => {
-			return (
-				<TableRow key={row.id}>
-					<TableCell component="th" scope="row">
-						<Avatar className={this.getAvatarColor(row.id)}>
-							{this.getAvatarText(row.name)}
-						</Avatar>
-					</TableCell>
-					<TableCell numeric>{row.id}</TableCell>
-					<TableCell>{row.name}</TableCell>
-					<TableCell numeric>{row.phoneNumber}</TableCell>
-					<TableCell>
-						<div>
-							<Button
-								variant="fab"
-								color="secondary"
-								aria-label="edit"
-								className={classes.buttonInline}
-							>
-								<EditIcon />
-							</Button>
-							<Button
-								variant="fab"
-								aria-label="delete"
-								className={classes.buttonInline}
-								onClick={() => {
-									onEntryDelete(row.phoneBookId, row.id);
-								}}
-							>
-								<DeleteIcon />
-							</Button>
-						</div>
-					</TableCell>
-				</TableRow>
-			);
-		});
-	};
-	render() {
-		const { classes } = this.props;
+  constructor(props) {
+    super(props);
+  }
+  getAvatarText = name => {
+    if (!name || 0 === name.length) return "";
+    return name[0];
+  };
+  getAvatarColor = id => {
+    const { classes } = this.props;
+    const mod = id % 5;
+    switch (mod) {
+      case 1:
+        return classes.orangeAvatar;
+      case 2:
+        return classes.purpleAvatar;
+      case 3:
+        return classes.greenAvatar;
+      case 4:
+        return classes.pinkAvatar;
+      default:
+        return classes.avatar;
+    }
+  };
 
-		return (
-			<React.Fragment>
-				<Button
-					variant="extendedFab"
-					aria-label="primary"
-					color="primary"
-					className={classes.button}
-				>
-					<AddIcon className={classes.primaryAdd} />
-					Add Contact
-				</Button>
-				<Paper className={classes.root}>
-					<Table className={classes.table}>
-						<TableHead>
-							<TableRow>
-								<TableCell />
-								<TableCell numeric>ID</TableCell>
-								<TableCell>Contact Name</TableCell>
-								<TableCell numeric>Phone Number</TableCell>
-								<TableCell />
-							</TableRow>
-						</TableHead>
-						<TableBody>{this.buildTableRows()}</TableBody>
-					</Table>
-				</Paper>
-			</React.Fragment>
-		);
-	}
+  handleClose = () => {
+    this.setState({
+      open: false,
+      selectedId: 0,
+      book: {
+        id: 0,
+        name: "",
+        phoneNumber: "",
+        phoneBookId: 0
+      }
+    });
+  };
+
+  handleEditClick = id => {
+    const lookup = this.props.rows.find(e => e.id === id);
+    const editObject = { ...lookup };
+    this.setState({
+      addNew: false,
+      open: true,
+      selectedId: id,
+      entry: editObject
+    });
+  };
+
+  handleAddClick = () => {
+    const editObject = {
+      id: 0,
+      name: "",
+      phoneNumber: "",
+      phoneBookId: this.props.phoneBook.id
+    };
+
+    this.setState({
+      addNew: true,
+      open: true,
+      selectedId: 0,
+      entry: editObject
+    });
+  };
+
+  handleNameChange(event) {
+    const temp = { ...this.state.entry };
+    temp.name = event.target.value;
+    this.setState({ entry: temp });
+  }
+
+  handleNumberChange(event) {
+    const temp = { ...this.state.entry };
+    temp.phoneNumber = event.target.value;
+    this.setState({ entry: temp });
+  }
+
+  getButtonText = () => {
+    if (this.state.addNew) return "Add";
+    else return "Update";
+  };
+
+  handleSaveClick = () => {
+    if (this.state.addNew) {
+      this.props.onEntryAdd(this.state.entry);
+    } else {
+      this.props.onEntryUpdate(this.state.entry);
+    }
+    this.handleClose();
+  };
+
+  buildTableRows = () => {
+    let { classes, rows, onEntryDelete } = this.props;
+    if (!rows || 0 === rows.length) return <TableRow key={0} />;
+    return rows.map(row => {
+      return (
+        <TableRow key={row.id}>
+          <TableCell component="th" scope="row">
+            <Avatar className={this.getAvatarColor(row.id)}>
+              {this.getAvatarText(row.name)}
+            </Avatar>
+          </TableCell>
+          <TableCell>{row.name}</TableCell>
+          <TableCell numeric>{row.phoneNumber}</TableCell>
+          <TableCell>
+            <div>
+              <Button
+                variant="fab"
+                color="secondary"
+                aria-label="edit"
+                className={classes.buttonInline}
+                onClick={() => {
+                  this.handleEditClick(row.id);
+                }}
+              >
+                <EditIcon />
+              </Button>
+              <Button
+                variant="fab"
+                aria-label="delete"
+                className={classes.buttonInline}
+                onClick={() => {
+                  onEntryDelete(row.phoneBookId, row.id);
+                }}
+              >
+                <DeleteIcon />
+              </Button>
+            </div>
+          </TableCell>
+        </TableRow>
+      );
+    });
+  };
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <React.Fragment>
+        <Button
+          variant="extendedFab"
+          aria-label="primary"
+          color="primary"
+          className={classes.button}
+          onClick={() => {
+            this.handleAddClick();
+          }}
+        >
+          <AddIcon className={classes.primaryAdd} />
+          Add Contact
+        </Button>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Contact Name</TableCell>
+                <TableCell numeric>Phone Number</TableCell>
+                <TableCell />
+              </TableRow>
+            </TableHead>
+            <TableBody>{this.buildTableRows()}</TableBody>
+          </Table>
+        </Paper>
+        <div>
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">
+              {this.getButtonText()} Contact Entry
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="entryname"
+                label="Contact Name"
+                type="entryname"
+                fullWidth
+                onChange={this.handleNameChange.bind(this)}
+                value={this.state.entry.name}
+              />
+              <TextField
+                margin="dense"
+                id="entrynumber"
+                label="Phone Number"
+                type="phonenumber"
+                fullWidth
+                onChange={this.handleNumberChange.bind(this)}
+                value={this.state.entry.phoneNumber}
+              />
+            </DialogContent>
+
+            <DialogActions>
+              <Button
+                onClick={this.handleClose}
+                color="primary"
+                variant="contained"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={this.handleSaveClick}
+                color="primary"
+                variant="contained"
+              >
+                {this.getButtonText()}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      </React.Fragment>
+    );
+  }
 }
 
 export default withStyles(styles)(EntryTable);
