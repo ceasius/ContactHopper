@@ -34,7 +34,7 @@ namespace ContactHopper.API.Controllers
             }
             catch (Exception ex)
             {
-                _log.LogError("GET", ex);
+                _log.LogError(ex, "GET");
                 throw ex;
             }
         }
@@ -63,7 +63,7 @@ namespace ContactHopper.API.Controllers
             }
             catch (Exception ex)
             {
-                _log.LogError("GET", ex);
+                _log.LogError(ex, "GET");
                 throw ex;
             }
         }
@@ -128,7 +128,7 @@ namespace ContactHopper.API.Controllers
             }
             catch (Exception ex)
             {
-                _log.LogError("POST", ex);
+                _log.LogError(ex, "POST");
                 throw ex;
             }
         }
@@ -157,7 +157,7 @@ namespace ContactHopper.API.Controllers
             }
             catch (Exception ex)
             {
-                _log.LogError("DELETE", ex);
+                _log.LogError(ex, "DELETE");
                 throw ex;
             }
         }

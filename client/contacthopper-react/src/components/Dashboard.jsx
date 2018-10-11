@@ -236,11 +236,18 @@ class Dashboard extends React.Component {
     let data = [];
     let phoneBook = {};
     if (!phoneBooks || 0 === phoneBooks.length) {
-      return (
-        <Typography variant="h4" gutterBottom component="h2">
-          Loading
-        </Typography>
-      );
+      if (!this.props.isLoaded)
+        return (
+          <Typography variant="h4" gutterBottom component="h2">
+            Loading
+          </Typography>
+        );
+      else
+        return (
+          <Typography variant="h4" gutterBottom component="h2">
+            No Content
+          </Typography>
+        );
     }
     phoneBook = phoneBooks.find(phone => phone.id === selectedPhoneBookId);
     if (phoneBook) data = phoneBook.entries;
@@ -249,6 +256,7 @@ class Dashboard extends React.Component {
         <EntryTable
           phoneBook={phoneBook}
           rows={data}
+          isLoaded={this.props.isLoaded}
           search={this.state.searchFilter}
           onEntryDelete={onEntryDelete}
           onEntryAdd={onEntryAdd}

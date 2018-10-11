@@ -73,8 +73,7 @@ const styles = theme => ({
 });
 const nameLabel = "Phonebook Name";
 class Album extends React.Component {
-  handleEdit = phoneBook => {
-  };
+  handleEdit = phoneBook => {};
   state = {
     open: false,
     addNew: false,
@@ -104,7 +103,7 @@ class Album extends React.Component {
     const editObject = {
       id: 0,
       name: "",
-      entries: [],
+      entries: []
     };
 
     this.setState({
@@ -136,26 +135,25 @@ class Album extends React.Component {
   };
 
   validateName(name) {
-    console.log(this.state.validName);
     if (name === null) {
       this.setState({
-        validName :false,
-        nameInput: "*",
+        validName: false,
+        nameInput: "*"
       });
       return;
     }
 
-    if(name === '') {
+    if (name === "") {
       this.setState({
-        validName :false,
-        nameInput: "*",
+        validName: false,
+        nameInput: "*"
       });
-      return; }
-      console.log(this.state.validName);
-     this.setState({
-       validName: true,
-       nameInput: ""
-     });
+      return;
+    }
+    this.setState({
+      validName: true,
+      nameInput: ""
+    });
   }
 
   getNameError() {
