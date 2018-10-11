@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace ContactHopper.API
 {
@@ -31,7 +32,13 @@ namespace ContactHopper.API
                 .AddCors();
 
             if (Environment.IsDevelopment())
-                services.AddContactSqlServerDb(Configuration);
+            {
+                var dbInMemory = Convert.ToBoolean(Configuration["DevUseInMemoryDb"]);
+                if (!dbInMemory)
+                    services.AddContactSqlServerDb(Configuration);
+                else
+                    services.AddContactInMemoryDb();
+            }
             else if (Environment.IsIntegrationTest())
                 services.AddContactInMemoryDb();
             else if (Environment.IsProduction())
