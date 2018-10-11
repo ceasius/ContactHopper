@@ -230,6 +230,7 @@ class Album extends React.Component {
             <DialogContent>
               <TextField
                 autoFocus
+                error
                 margin="dense"
                 id="phonebook"
                 label="Phonebook Name"
