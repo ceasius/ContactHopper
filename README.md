@@ -6,11 +6,11 @@
 
 This project has been developed using the following tools and may be required to run the application:
 
-    1. Visual Studio 2017
-    2. Visual Studio Code
-    3. SQL Management Studio
-    4. .NET Core 2.1 SDK
-    5. NodeJS
+ * [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/)
+ * [Visual Studio Code](https://visualstudio.microsoft.com/downloads/)
+ * [SQL Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017)
+ * [.NET Core SDK](https://www.microsoft.com/net/download)
+ * [NodeJS LTS](https://nodejs.org/en/)
 
 ---
 
@@ -45,6 +45,9 @@ The React component provides the front end for the system.
 
     1. Open the project with visual studio code at location \client\contacthopper-react
     2. Ensure the Web API is running in order to supply data
-    2. Run the following commands in the console:
-    	2.1 npm install - get all missing packages
-    	2.2 npm start - will run app
+    3. Run the following commands in the console:
+    	3.1 npm install - get all missing packages
+    	3.2 npm start - will run app
+        
+---
+## Screenshots
