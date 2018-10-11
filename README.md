@@ -51,3 +51,4 @@ The React component provides the front end for the system.
         
 ---
 ## Screenshots
+![ScreenShot](https://raw.githubusercontent.com/Ceasius/ContactHopper/master/content/readme.PNG)
