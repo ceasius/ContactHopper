@@ -71,14 +71,16 @@ const styles = theme => ({
     padding: theme.spacing.unit * 6
   }
 });
+const nameLabel = "Phonebook Name";
 class Album extends React.Component {
   handleEdit = phoneBook => {
-    const { entry } = this.props;
   };
   state = {
     open: false,
     addNew: false,
     selectedId: 0,
+    validName: true,
+    nameInput: "",
     book: {
       name: "",
       entries: []
@@ -92,7 +94,9 @@ class Album extends React.Component {
       addNew: false,
       open: true,
       selectedId: id,
-      book: editObject
+      book: editObject,
+      validName: true,
+      nameInput: ""
     });
   };
 
@@ -100,14 +104,16 @@ class Album extends React.Component {
     const editObject = {
       id: 0,
       name: "",
-      entries: []
+      entries: [],
     };
 
     this.setState({
       addNew: true,
       open: true,
       selectedId: 0,
-      book: editObject
+      book: editObject,
+      validName: false,
+      nameInput: "*"
     });
   };
 
@@ -129,9 +135,38 @@ class Album extends React.Component {
     onRedirectTables();
   };
 
+  validateName(name) {
+    console.log(this.state.validName);
+    if (name === null) {
+      this.setState({
+        validName :false,
+        nameInput: "*",
+      });
+      return;
+    }
+
+    if(name === '') {
+      this.setState({
+        validName :false,
+        nameInput: "*",
+      });
+      return; }
+      console.log(this.state.validName);
+     this.setState({
+       validName: true,
+       nameInput: ""
+     });
+  }
+
+  getNameError() {
+    if (!this.state.validateName) return "outlined-error";
+    else return "outlined-name";
+  }
+
   handleChange(event) {
     const temp = { ...this.state.book };
     temp.name = event.target.value;
+    this.validateName(temp.name);
     this.setState({ book: temp });
   }
 
@@ -230,11 +265,11 @@ class Album extends React.Component {
             <DialogContent>
               <TextField
                 autoFocus
-                error
                 margin="dense"
-                id="phonebook"
-                label="Phonebook Name"
+                id="phonebookname"
+                label={nameLabel + this.state.nameInput}
                 type="phonebook"
+                error={!this.state.validName}
                 fullWidth
                 onChange={this.handleChange.bind(this)}
                 value={this.state.book.name}
@@ -252,6 +287,7 @@ class Album extends React.Component {
                 onClick={this.handleSaveClick}
                 color="primary"
                 variant="contained"
+                disabled={!this.state.validName}
               >
                 {this.getButtonText()}
               </Button>

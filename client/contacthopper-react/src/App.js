@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import EntryTable from "./components/EntryTable";
 import "./App.css";
 import Dashboard from "./components/Dashboard";
 
@@ -44,13 +43,8 @@ class App extends Component {
 		isLoaded: false,
 		items: [],
 		theme: "dark",
-		//example dummy data
 		phoneBooks: []
 	};
-
-	constructor(props) {
-		super(props);
-	}
 
 	setTheme() {
 		if (this.state.theme === "dark") return darktheme;

@@ -78,12 +78,16 @@ const styles = theme => ({
     height: 40
   }
 });
-
+const nameLabel = "Contact Name";
+const numberLabel = "Phone Number";
 class EntryTable extends Component {
   state = {
     open: false,
     addNew: false,
     selectedId: 0,
+    validName: false,
+    validNumber: true,
+    nameInput: "*",
     entry: {
       id: 0,
       name: "",
@@ -91,9 +95,6 @@ class EntryTable extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-  }
   getAvatarText = name => {
     if (!name || 0 === name.length) return "";
     return name[0];
@@ -134,6 +135,10 @@ class EntryTable extends Component {
     this.setState({
       addNew: false,
       open: true,
+      validName: true,
+      validNumber: true,
+      nameInput: "*",
+      numberInput: "*",
       selectedId: id,
       entry: editObject
     });
@@ -151,6 +156,10 @@ class EntryTable extends Component {
       addNew: true,
       open: true,
       selectedId: 0,
+      validName: false,
+      validNumber: false,
+      nameInput: "*",
+      numberInput: "*",
       entry: editObject
     });
   };
@@ -158,13 +167,59 @@ class EntryTable extends Component {
   handleNameChange(event) {
     const temp = { ...this.state.entry };
     temp.name = event.target.value;
+    this.validateName(temp.name);
     this.setState({ entry: temp });
+  }
+
+  validateName(name) {
+    if (name === null) {
+      this.setState({
+        validName: false,
+        nameInput: "*"
+      });
+      return;
+    }
+
+    if (name === "") {
+      this.setState({
+        validName: false,
+        nameInput: "*"
+      });
+      return;
+    }
+    this.setState({
+      validName: true,
+      nameInput: ""
+    });
   }
 
   handleNumberChange(event) {
     const temp = { ...this.state.entry };
     temp.phoneNumber = event.target.value;
+    this.validateNumber(temp.phoneNumber);
     this.setState({ entry: temp });
+  }
+
+  validateNumber(number) {
+    if (number === null || number === "") {
+      this.setState({
+        validNumber: false,
+        numberInput: "*"
+      });
+      return;
+    }
+    const text = number.replace("+", "");
+    if (isNaN(text) || text.length < 8 || text.length > 15) {
+      this.setState({
+        validNumber: false,
+        numberInput: ": Invalid Number"
+      });
+      return;
+    }
+    this.setState({
+      validNumber: true,
+      numberInput: ""
+    });
   }
 
   getButtonText = () => {
@@ -229,7 +284,7 @@ class EntryTable extends Component {
   };
   render() {
     const { classes } = this.props;
-
+    console.log(this.state.validName);
     return (
       <React.Fragment>
         <Button
@@ -271,7 +326,8 @@ class EntryTable extends Component {
                 autoFocus
                 margin="dense"
                 id="entryname"
-                label="Contact Name"
+                label={nameLabel + this.state.nameInput}
+                error={!this.state.validName}
                 type="entryname"
                 fullWidth
                 onChange={this.handleNameChange.bind(this)}
@@ -280,8 +336,9 @@ class EntryTable extends Component {
               <TextField
                 margin="dense"
                 id="entrynumber"
-                label="Phone Number"
                 type="phonenumber"
+                label={numberLabel + this.state.numberInput}
+                error={!this.state.validNumber}
                 fullWidth
                 onChange={this.handleNumberChange.bind(this)}
                 value={this.state.entry.phoneNumber}
@@ -300,6 +357,7 @@ class EntryTable extends Component {
                 onClick={this.handleSaveClick}
                 color="primary"
                 variant="contained"
+                disabled={!(this.state.validName && this.state.validNumber)}
               >
                 {this.getButtonText()}
               </Button>
