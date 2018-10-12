@@ -1,6 +1,5 @@
 ## Welcome to Contact Hopper - Simple React & .Net Core Project
 
----
 
 ## Development Tools
 
@@ -12,7 +11,6 @@ This project has been developed using the following tools and may be required to
  * [.NET Core SDK](https://www.microsoft.com/net/download)
  * [NodeJS LTS](https://nodejs.org/en/)
 
----
 
 ## Migrating the EF Core Database
 
@@ -26,7 +24,6 @@ The database will be accessed by the Web API. For this implementation Entity Fra
     	4.2 PM> add-migration {migrationName} - (Optional, can be skipped as migrations are already set up) to add any required changes for the database
     	4.3 PM> update-database - if the migration file needs to be applied
 
----
 
 ## Running the Web API
 
@@ -37,7 +34,6 @@ The Web API provides a secure method to access data for this application. It was
             2.1 Alternatively, In Memory database option is available in appsettings.json
     3. Set ContactHopper.API as the StartUp Project and Run
 
----
 
 ## Running the React Web App
 
@@ -49,6 +45,5 @@ The React component provides the front end for the system.
     	3.1 npm install - get all missing packages
     	3.2 npm start - will run app
         
----
 ## Screenshots
 ![ScreenShot](https://raw.githubusercontent.com/Ceasius/ContactHopper/master/content/readme.PNG)
