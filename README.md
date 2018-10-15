@@ -9,7 +9,7 @@ This project has been developed using the following tools and may be required to
  * [Visual Studio Code](https://visualstudio.microsoft.com/downloads/)
  * [SQL Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017)
  * [.NET Core SDK](https://www.microsoft.com/net/download)
- * [NodeJS LTS](https://nodejs.org/en/)
+ * [Node.js LTS](https://nodejs.org/en/)
 
 
 ## Migrating the EF Core Database
@@ -37,7 +37,7 @@ The Web API provides a secure method to access data for this application. It was
 
 ## Running the React Web App
 
-The React component provides the front end for the system.
+The React component provides the front end for the system. This section requires Node.js
 
     1. Open the project with visual studio code at location \client\contacthopper-react
     2. Ensure the Web API is running in order to supply data
