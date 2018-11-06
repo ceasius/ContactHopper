@@ -7,7 +7,7 @@ This project has been developed using the following tools and may be required to
 
  * [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/)
  * [Visual Studio Code](https://visualstudio.microsoft.com/downloads/)
- * [SQL Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017)
+ * [SQL Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017)
  * [.NET Core SDK](https://www.microsoft.com/net/download)
  * [Node.js LTS](https://nodejs.org/en/)
 
