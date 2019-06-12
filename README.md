@@ -37,7 +37,7 @@ The Web API provides a secure method to access data for this application. It was
 
 ## Running the React Web App
 
-The React component provides the front end for the system. This section requires Node.js
+The `React` component provides the front end for the system. This section requires Node.js
 
     1. Open the project with visual studio code at location \client\contacthopper-react
     2. Ensure the Web API is running in order to supply data
